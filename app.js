@@ -6,7 +6,7 @@ mongoose.connect(process.env.MONGO_URI)
 .then("Successfully connected to mongo db")
 .catch("error")
 const userRoute=require("./routes/userRoute")
-
+app.use(express.json())
 app.use(userRoute)
 const port=8000
 app.listen(8000,()=>{
