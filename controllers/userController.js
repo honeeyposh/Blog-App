@@ -58,9 +58,12 @@ exports.deleteUser=async(req,res,next)=>{
     try{
         user=await userModel.findOne({email})
         if(!user){
-            res.send("User doesnt exist please login")
+            res.send("User doesnt exist please Sign in")
         }
         comparePassword=bcrypt.compareSync(password,user.password)
+        if(!comparePassword){
+            res.send("Please provide a valid password")
+        }
         res.json({sucees:true,name:user.name,id:user.id})
     }catch(error){
         console.log(error)
