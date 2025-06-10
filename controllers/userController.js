@@ -2,12 +2,12 @@ const userModel = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 exports.createUser = async (req, res, next) => {
   const { email, password, ...others } = req.body;
+  if (!email || !password) {
+    return res.send("Email and password required");
+  }
   const userExist = await userModel.findOne({ email });
   if (userExist) {
     return res.send("User alrealdy exist");
-  }
-  if (!email || !password) {
-    return res.send("Email and password required");
   }
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(password, salt);
