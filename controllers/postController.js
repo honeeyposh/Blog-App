@@ -1,8 +1,13 @@
 const postModel = require("../models/postModel");
+const jwt = require("jsonwebtoken");
 exports.createPost = async (req, res) => {
   const body = req.body;
+  // const { token } = req.cookies;
+  // const {token}=req.headers
+  const { id } = req.user;
   try {
-    const newPost = await postModel.create({ ...body });
+    console.log(req.user);
+    const newPost = await postModel.create({ creator: id, ...body });
     return res.status(201).json({ newPost });
   } catch (error) {
     res.send(error.message);
@@ -10,6 +15,7 @@ exports.createPost = async (req, res) => {
 };
 exports.getSinglePost = async (req, res) => {
   const { postId } = req.params;
+  //   console.log(req.cookies.token);
   try {
     const post = await postModel.findById(postId);
     if (!post) {
@@ -34,13 +40,15 @@ exports.getPosts = async (req, res) => {
 };
 exports.deletePost = async (req, res) => {
   const { postId } = req.params;
-  const { userId } = req.body;
+  const { admin, id } = req.user;
+  // const { userId } = req.body;
   try {
     const post = await postModel.findById(postId);
     if (!post) {
       return res.send("post not found");
     }
-    if (userId != post.creator) {
+    console.log(payload.admin);
+    if (id != post.creator && !admin) {
       return res.send("you cant delete this post");
     }
     await postModel.findByIdAndDelete(postId);

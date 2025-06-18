@@ -6,11 +6,11 @@ const {
   updatePost,
   getSinglePost,
 } = require("../controllers/postController");
-const router = require("./userRoute");
+const authentication = require("../middlewares/authMiddleware");
 const route = express.Router();
-route.post("/post", createPost);
+route.post("/post", authentication, createPost);
 route.get("/post", getPosts);
 route.get("/post/:postId", getSinglePost);
-route.delete("/post/:postId", deletePost);
-router.put("/post/:postId/:userId", updatePost);
+route.delete("/post/:postId", authentication, deletePost);
+route.put("/post/:postId/:userId", updatePost);
 module.exports = route;

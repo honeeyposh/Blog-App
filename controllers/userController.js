@@ -1,5 +1,6 @@
 const userModel = require("../models/userModel");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 exports.createUser = async (req, res, next) => {
   const { email, password, ...others } = req.body;
   if (!email || !password) {
@@ -76,7 +77,18 @@ exports.login = async (req, res, next) => {
     if (!comparePassword) {
       return res.send("Please provide a valid password");
     }
-    return res.json({ sucees: true, name: user.name, id: user.id });
+    const token = jwt.sign(
+      { id: user.id, admin: user.isAdmin },
+      process.env.JWT_SECRET,
+      { expiresIn: "1hr" }
+    );
+    res.cookie("token", token, {
+      maxAge: 1000 * 60 * 60,
+      secure: true,
+      httpOnly: true,
+    });
+    res.cookie("cookie2", "this is the second cookie");
+    return res.json({ success: true, token });
   } catch (error) {
     return res.send(error.message);
   }
