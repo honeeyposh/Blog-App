@@ -13,10 +13,12 @@ mongoose
   });
 const userRoute = require("./routes/userRoute");
 const postRoute = require("./routes/postRoute");
+const kycRoute = require("./routes/kycRoute");
 app.use(express.json());
 app.use(cookieParser());
 app.use(userRoute);
 app.use(postRoute);
+app.use(kycRoute);
 const port = 8000;
 app.listen(8000, () => {
   console.log(`Server Listen on port ${port}`);

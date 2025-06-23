@@ -20,6 +20,22 @@ const userSchema = new mongoose.Schema({
   hobbies: {
     type: [String],
   },
+  kyc: {
+    type: mongoose.Types.ObjectId,
+    ref: "Kyc",
+  },
+  posts: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: "Post",
+    },
+  ],
+  books: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: "Book",
+    },
+  ],
 });
 const userModel = mongoose.model("User", userSchema);
 module.exports = userModel;
